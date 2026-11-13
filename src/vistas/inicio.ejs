@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parking Control</title>
+    <link rel="stylesheet" href="/estilos.css">
+    <script src="/sweetalert2.js" defer></script>
+    <script src="/principal.js" defer></script>
+</head>
+<body>
+    <h1>Parking Control</h1>
+    <a href="/clientes">Clientes mensuales</a>
+
+    <% if (mensaje || error) { %>
+        <p id="aviso" data-icono="<%= error ? 'error' : 'success' %>"><%= error || mensaje %></p>
+    <% } %>
+
+    <h2 id="ingreso">Registrar ingreso</h2>
+    <% if (plazas.some(plaza => plaza.estado === 'Disponible')) { %>
+        <form action="/ingresos" method="post" aria-labelledby="ingreso">
+            <p>
+                <label for="patente">Patente</label><br>
+                <input id="patente" name="patente" maxlength="15" required spellcheck="false">
+            </p>
+            <p>
+                <label for="tarifa">Tipo de vehículo</label><br>
+                <select id="tarifa" name="tarifa" required>
+                    <% for (const tarifa of tarifas) { %>
+                        <option value="<%= tarifa.id %>"><%= tarifa.tipo %> ($<%= tarifa.precio_hora %> por hora o fracción)</option>
+                    <% } %>
+                </select>
+            </p>
+            <p>
+                <label for="plaza-ingreso">Plaza disponible</label><br>
+                <select id="plaza-ingreso" name="plaza" required>
+                    <% for (const plaza of plazas) { %>
+                        <% if (plaza.estado === 'Disponible') { %>
+                            <option value="<%= plaza.id %>"><%= plaza.codigo %></option>
+                        <% } %>
+                    <% } %>
+                </select>
+            </p>
+            <button type="submit">Registrar ingreso</button>
+        </form>
+    <% } else { %>
+        <p>No hay plazas disponibles.</p>
+    <% } %>
+
+    <h2 id="activos">Vehículos activos</h2>
+    <% if (activos.length > 0) { %>
+        <table aria-labelledby="activos">
+            <thead>
+                <tr><th>Patente</th><th>Tipo</th><th>Plaza</th><th>Entrada</th></tr>
+            </thead>
+            <tbody>
+                <% for (const ticket of activos) { %>
+                    <tr>
+                        <td><%= ticket.patente %></td>
+                        <td><%= ticket.tipo %></td>
+                        <td><%= ticket.codigo %></td>
+                        <td><%= ticket.entrada %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+
+        <h2 id="salida">Registrar salida</h2>
+        <form action="/salidas" method="post" aria-labelledby="salida">
+            <p>
+                <label for="ticket">Vehículo</label><br>
+                <select id="ticket" name="ticket" required>
+                    <% for (const ticket of activos) { %>
+                        <option value="<%= ticket.id %>"><%= ticket.patente %> (<%= ticket.codigo %>)</option>
+                    <% } %>
+                </select>
+            </p>
+            <p>
+                <label for="metodo">Método de pago</label><br>
+                <select id="metodo" name="metodo" required>
+                    <option>Efectivo</option>
+                    <option>Tarjeta</option>
+                    <option>Transferencia</option>
+                </select>
+            </p>
+            <button type="submit">Registrar salida y pago</button>
+        </form>
+    <% } else { %>
+        <p>No hay vehículos estacionados.</p>
+    <% } %>
+
+    <h2 id="plazas">Plazas</h2>
+    <table aria-labelledby="plazas">
+        <thead><tr><th>Código</th><th>Sección</th><th>Estado</th></tr></thead>
+        <tbody>
+            <% for (const plaza of plazas) { %>
+                <tr><td><%= plaza.codigo %></td><td><%= plaza.seccion %></td><td><%= plaza.estado %></td></tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <% if (plazas.some(plaza => plaza.estado !== 'Ocupada')) { %>
+        <h3 id="estado-plaza">Cambiar estado de una plaza</h3>
+        <form action="/plazas" method="post" aria-labelledby="estado-plaza">
+            <p>
+                <label for="plaza-estado">Plaza</label><br>
+                <select id="plaza-estado" name="plaza" required>
+                    <% for (const plaza of plazas) { %>
+                        <% if (plaza.estado !== 'Ocupada') { %>
+                            <option value="<%= plaza.id %>"><%= plaza.codigo %></option>
+                        <% } %>
+                    <% } %>
+                </select>
+            </p>
+            <p>
+                <label for="estado">Estado</label><br>
+                <select id="estado" name="estado" required>
+                    <option>Disponible</option>
+                    <option>Mantenimiento</option>
+                </select>
+            </p>
+            <button type="submit">Guardar estado</button>
+        </form>
+    <% } %>
+
+    <h2 id="pagos">Historial de pagos</h2>
+    <% if (pagos.length > 0) { %>
+        <table aria-labelledby="pagos">
+            <thead><tr><th>Ticket</th><th>Patente</th><th>Salida</th><th>Monto</th><th>Método</th></tr></thead>
+            <tbody>
+                <% for (const pago of pagos) { %>
+                    <tr>
+                        <td><%= pago.ticket_id %></td>
+                        <td><%= pago.patente %></td>
+                        <td><%= pago.salida %></td>
+                        <td>$<%= pago.monto %></td>
+                        <td><%= pago.metodo %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>Todavía no hay pagos registrados.</p>
+    <% } %>
+</body>
+</html>

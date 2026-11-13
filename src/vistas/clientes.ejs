@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clientes mensuales</title>
+    <link rel="stylesheet" href="/estilos.css">
+    <script src="/sweetalert2.js" defer></script>
+    <script src="/principal.js" defer></script>
+</head>
+<body>
+    <h1>Clientes mensuales</h1>
+    <a href="/">Volver al estacionamiento</a>
+
+    <% if (mensaje || error) { %>
+        <p id="aviso" data-icono="<%= error ? 'error' : 'success' %>"><%= error || mensaje %></p>
+    <% } %>
+
+    <h2 id="nuevo-cliente">Registrar cliente</h2>
+    <form action="/clientes" method="post" aria-labelledby="nuevo-cliente">
+        <p>
+            <label for="nombre">Nombre</label><br>
+            <input id="nombre" name="nombre" maxlength="100" autocomplete="name" required>
+        </p>
+        <p>
+            <label for="telefono">Teléfono</label><br>
+            <input id="telefono" name="telefono" type="tel" maxlength="25" autocomplete="tel" required>
+        </p>
+        <p>
+            <label for="estado">Estado de la suscripción</label><br>
+            <select id="estado" name="estado" required>
+                <option>Activa</option>
+                <option>Inactiva</option>
+            </select>
+        </p>
+        <button type="submit">Guardar cliente</button>
+    </form>
+
+    <h2 id="lista-clientes">Clientes registrados</h2>
+    <% if (clientes.length > 0) { %>
+        <table aria-labelledby="lista-clientes">
+            <thead><tr><th>Nombre</th><th>Teléfono</th><th>Suscripción</th></tr></thead>
+            <tbody>
+                <% for (const cliente of clientes) { %>
+                    <tr><td><%= cliente.nombre %></td><td><%= cliente.telefono %></td><td><%= cliente.estado %></td></tr>
+                <% } %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>Todavía no hay clientes registrados.</p>
+    <% } %>
+</body>
+</html>
