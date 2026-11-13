@@ -1,9 +1,9 @@
-const express = require('express');
-const clientes = require('../controllers/clientes');
+import express from 'express';
+import { cargarClientes, guardarCliente } from '../controllers/clientes.js';
 
 const router = express.Router();
 
-router.get('/', clientes.cargarClientes);
-router.post('/', clientes.guardarCliente);
+router.get('/', cargarClientes);
+router.post('/', guardarCliente);
 
-module.exports = router;
+export default router;

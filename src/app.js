@@ -1,16 +1,19 @@
-const express = require('express');
-const path = require('node:path');
-const rutasEstacionamiento = require('./rutas/estacionamiento');
-const rutasClientes = require('./rutas/clientes');
+import express from 'express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import rutasEstacionamiento from './rutas/estacionamiento.js';
+import rutasClientes from './rutas/clientes.js';
 
 const app = express();
+const carpeta = import.meta.dirname;
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'vistas'));
+app.set('views', path.join(carpeta, 'vistas'));
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(carpeta, 'public')));
 app.get('/sweetalert2.js', (req, res) => {
-    res.sendFile(require.resolve('sweetalert2/dist/sweetalert2.all.min.js'));
+    const archivo = import.meta.resolve('sweetalert2/dist/sweetalert2.all.min.js');
+    res.sendFile(fileURLToPath(archivo));
 });
 
 app.use('/', rutasEstacionamiento);

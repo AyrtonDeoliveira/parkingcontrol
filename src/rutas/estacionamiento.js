@@ -1,11 +1,11 @@
-const express = require('express');
-const estacionamiento = require('../controllers/estacionamiento');
+import express from 'express';
+import { cargarInicio, registrarIngreso, registrarSalida, cambiarEstadoPlaza } from '../controllers/estacionamiento.js';
 
 const router = express.Router();
 
-router.get('/', estacionamiento.cargarInicio);
-router.post('/ingresos', estacionamiento.registrarIngreso);
-router.post('/salidas', estacionamiento.registrarSalida);
-router.post('/plazas', estacionamiento.cambiarEstadoPlaza);
+router.get('/', cargarInicio);
+router.post('/ingresos', registrarIngreso);
+router.post('/salidas', registrarSalida);
+router.post('/plazas', cambiarEstadoPlaza);
 
-module.exports = router;
+export default router;

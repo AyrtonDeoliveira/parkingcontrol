@@ -1,4 +1,4 @@
-const db = require('../database/conexion');
+import db from '../database/conexion.js';
 
 async function cargarInicio(req, res) {
     const [tarifas] = await db.query('SELECT * FROM tarifas ORDER BY id');
@@ -147,4 +147,4 @@ async function cambiarEstadoPlaza(req, res) {
     res.redirect('/?mensaje=Estado de la plaza guardado.');
 }
 
-module.exports = { cargarInicio, registrarIngreso, registrarSalida, cambiarEstadoPlaza };
+export { cargarInicio, registrarIngreso, registrarSalida, cambiarEstadoPlaza };

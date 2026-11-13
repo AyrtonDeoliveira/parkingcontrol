@@ -1,4 +1,4 @@
-const db = require('../database/conexion');
+import db from '../database/conexion.js';
 
 async function cargarClientes(req, res) {
     const [clientes] = await db.query('SELECT * FROM clientes ORDER BY nombre');
@@ -21,4 +21,4 @@ async function guardarCliente(req, res) {
     res.redirect('/clientes?mensaje=Cliente guardado.');
 }
 
-module.exports = { cargarClientes, guardarCliente };
+export { cargarClientes, guardarCliente };
