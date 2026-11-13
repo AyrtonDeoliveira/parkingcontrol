@@ -6,16 +6,8 @@ Sistema sencillo para registrar ingresos, salidas y pagos de un estacionamiento.
 
 1. Instalá Node.js 22 o superior y tené MySQL en ejecución.
 2. Abrí [base_de_datos.sql](base_de_datos.sql) en MySQL Workbench y ejecutalo completo para crear la base y cargar los datos de prueba.
-3. En PowerShell, configurá las variables de entorno de MySQL. Usá tu usuario y tu contraseña.
-
-   ```powershell
-   $env:DB_HOST = '127.0.0.1'
-   $env:DB_USER = 'root'
-   $env:DB_PASSWORD = 'tu_contraseña'
-   $env:DB_NAME = 'parkingcontrol'
-   ```
-
-4. En la misma consola, desde la carpeta del proyecto, ejecutá `npm install` y luego `npm run dev`.
+3. Escribí el usuario y la contraseña de tu MySQL en [conexion.js](src/database/conexion.js).
+4. En la carpeta del proyecto ejecutá `npm install` y luego `npm run dev`.
 5. Abrí [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
 El sistema cobra una hora como mínimo. Cada fracción se redondea hacia arriba. Por ejemplo, un automóvil que estuvo 1 hora y 20 minutos paga $4.000. Se usa el precio guardado al ingresar. La pantalla de clientes mensuales permite registrar y consultar el nombre, el teléfono y el estado de la suscripción.
